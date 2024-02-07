@@ -1,35 +1,38 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+
+const getRandomIndex = (length) => Math.floor(Math.random() * length);
+
+const createRandomHexColor = () => {
+    const hex = "0123456789ABCDEF";
+    let hexColor = "#";
+
+    for (let i = 0; i < 6; i++) {
+        hexColor += hex[getRandomIndex(hex.length)];
+    }
+    return hexColor;
+};
+
+const createRandomRgbColor = () => {
+    const rgbColor = `rgb(${getRandomIndex(256)}, ${getRandomIndex(256)}, ${getRandomIndex(256)})`;
+    return rgbColor;
+};
 
 export default function RandomColor() {
     const [typeOfColor, setTypeOfColor] = useState("hex");
     const [color, setColor] = useState("#000000");
 
-    const handleRandomColorUtility = (length) => {
-        return Math.floor(Math.random() * length);
-    }
-    const handleCreateRandomHexColor = () => {
-        const hex = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"];
-        let hexColor = "#";
-
-        for(let i=0; i<6; i++){
-            hexColor += hex[handleRandomColorUtility(hex.length)];
-        }
-        setColor(hexColor);
-    }
-
-    const handleCreateRandomRgbColor = () => {
-        const rgbColor = `rgb(${handleRandomColorUtility(255)}, ${handleRandomColorUtility(255)}, ${handleRandomColorUtility(255)})`;
-
-        setColor(rgbColor);
-    }
     useEffect(() => {
-        if (typeOfColor === "rgb") handleCreateRandomRgbColor();
-        else handleCreateRandomHexColor();
+        const randomColor = typeOfColor === "rgb" ? createRandomRgbColor() : createRandomHexColor();
+        setColor(randomColor);
     }, [typeOfColor]);
 
+    const handleColorTypeChange = (newType) => {
+        setTypeOfColor(newType);
+    };
+
     return (
-        <div style={
-            {
+        <div
+            style={{
                 backgroundColor: color,
                 display: "flex",
                 flexDirection: "column",
@@ -37,13 +40,13 @@ export default function RandomColor() {
                 alignItems: "center",
                 width: "100vw",
                 height: "100vh",
-                color: "white"
-            }
-        }>
+                color: "white",
+            }}
+        >
             <h1>Random Color</h1>
-            <button onClick={() => setTypeOfColor("hex")}>Create HEX Color</button>
-            <button onClick={() => setTypeOfColor("rgb")}>Create RGB Color</button>
-            <button onClick={typeOfColor === 'hex' ? handleCreateRandomHexColor : handleCreateRandomRgbColor}>
+            <button onClick={() => handleColorTypeChange("hex")}>Create HEX Color</button>
+            <button onClick={() => handleColorTypeChange("rgb")}>Create RGB Color</button>
+            <button onClick={() => setColor(typeOfColor === "hex" ? createRandomHexColor() : createRandomRgbColor)}>
                 Generate Random Color
             </button>
             <div
@@ -54,13 +57,14 @@ export default function RandomColor() {
                     color: "#fff",
                     fontSize: "60px",
                     marginTop: "50px",
-                    flexDirection: 'column',
-                    gap: '20px'
+                    flexDirection: "column",
+                    gap: "20px",
                 }}
             >
                 <h3>{typeOfColor === "rgb" ? "RGB Color" : "HEX Color"}</h3>
                 <h1>{color}</h1>
             </div>
         </div>
-    )
+    );
 }
+
