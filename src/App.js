@@ -1,9 +1,11 @@
 import './App.css';
+import RandomColor from "./rendom-color";
 
 function App() {
   return (
     <div className="App">
-      HEX
+        {/* Random color component */}
+         <RandomColor/>
     </div>
   );
 }
